@@ -62,6 +62,26 @@
             margin-top: 5px;
             font-style: italic;
         }
+        /* Style baru untuk Kotak Rekomendasi Link */
+        .recommendation-box {
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #eef2ef;
+            border-left: 4px solid #4a8a4f;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            display: none; /* Sembunyi sebelum diketik */
+        }
+        .recommendation-box a {
+            color: #4a8a4f;
+            font-weight: 700;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .recommendation-box a:hover {
+            text-decoration: underline;
+            color: #3b6e3f;
+        }
         button {
             width: 100%;
             background-color: #4a8a4f;
@@ -95,6 +115,11 @@
         <label for="keyword">Keyword Utama:</label>
         <input type="text" id="keyword" placeholder="Contoh: modern living room decor" autocomplete="off">
         <div class="note">Keyword ini akan digunakan sebagai nama file HTML.</div>
+        
+        <div id="rec-box" class="recommendation-box">
+            Link Rekomendasi: <br>
+            <a href="#" id="rec-link" target="_blank">-</a>
+        </div>
     </div>
     
     <div class="form-group">
@@ -108,17 +133,68 @@
 </div>
 
 <script>
+// Variabel global untuk menyimpan domain
+let baseDomain = "https://dreamroomdecor.github.io/trends/"; // Domain Default (jika gagal memuat)
+
+// Ambil domain dari file domain.txt saat halaman dimuat
+fetch('domain.txt')
+    .then(response => response.text())
+    .then(data => {
+        let domain = data.trim();
+        if (domain) {
+            // Hilangkan jika ada teks format yang tidak sengaja copy-paste seperti 
+            domain = domain.replace(/\\[.*?\\]\\s*/g, '').replace(/\\s*/gi, '').trim(); 
+            
+            // Pastikan URL memiliki format yang tepat
+            if (!domain.startsWith('http://') && !domain.startsWith('https://')) {
+                domain = 'https://' + domain;
+            }
+            // Pastikan ada '/' di akhir
+            if (!domain.endsWith('/')) {
+                domain += '/';
+            }
+            baseDomain = domain;
+        }
+    })
+    .catch(err => console.log('File domain.txt tidak ditemukan. Menggunakan domain default.'));
+
+// Logika untuk menampilkan preview Link Rekomendasi
+const keywordInput = document.getElementById('keyword');
+const recBox = document.getElementById('rec-box');
+const recLink = document.getElementById('rec-link');
+
+keywordInput.addEventListener('input', function() {
+    const keywordText = this.value.trim();
+    if (keywordText.length > 0) {
+        // Buat slug otomatis dari input user
+        const slug = keywordText.toLowerCase()
+                                .replace(/\s+/g, '-')
+                                .replace(/[^a-z0-9-]/g, '')
+                                .replace(/-+/g, '-');
+                                
+        // Gabungkan domain + slug
+        const fullUrl = baseDomain + slug;
+        
+        recLink.href = fullUrl;
+        recLink.textContent = fullUrl;
+        recBox.style.display = 'block';
+    } else {
+        recBox.style.display = 'none';
+    }
+});
+
+
 function generateAndDownload() {
-    const keywordInput = document.getElementById('keyword').value.trim();
+    const keywordInputVal = document.getElementById('keyword').value.trim();
     const contentInput = document.getElementById('content').value.trim();
     
-    if (!keywordInput || !contentInput) {
+    if (!keywordInputVal || !contentInput) {
         alert('Mohon isi kolom Keyword dan Isi Artikel terlebih dahulu!');
         return;
     }
     
     // 1. Buat Slug URL & Nama File
-    const keywordSlug = keywordInput.toLowerCase()
+    const keywordSlug = keywordInputVal.toLowerCase()
                                     .replace(/\s+/g, '-')
                                     .replace(/[^a-z0-9-]/g, '')
                                     .replace(/-+/g, '-');
@@ -139,12 +215,12 @@ function generateAndDownload() {
     articleBodyHtml += `<center><script src="https://seribudollarperhari.github.io/banner/ad2.js"><\/script></center>\n`;
     
     const relatedQueries = [
-        `${keywordInput} interior design`,
-        `${keywordInput} home decor ideas`,
-        `${keywordInput} room aesthetic`,
-        `${keywordInput} minimalist styling`,
-        `${keywordInput} modern layout inspiration`,
-        `${keywordInput} beautiful house decor`
+        `${keywordInputVal} interior design`,
+        `${keywordInputVal} home decor ideas`,
+        `${keywordInputVal} room aesthetic`,
+        `${keywordInputVal} minimalist styling`,
+        `${keywordInputVal} modern layout inspiration`,
+        `${keywordInputVal} beautiful house decor`
     ];
     
     remainingParagraphs.forEach((paragraphText, index) => {
@@ -153,9 +229,9 @@ function generateAndDownload() {
             const queryIndex = Math.floor(index / 2) % relatedQueries.length;
             const chosenImageQuery = relatedQueries[queryIndex];
             
-            // Link ke target AGC Anda
             const agcTargetSlug = chosenImageQuery.replace(/\s+/g, '-').toLowerCase();
-            const agcTargetUrl = `https://dreamroomdecor.github.io/trends/detail.html?q=${encodeURIComponent(agcTargetSlug)}`;
+            // MENGGUNAKAN BASE DOMAIN TERBARU DENGAN FORMAT LANGSUNG (TANPA detail.html?q=)
+            const agcTargetUrl = `${baseDomain}${agcTargetSlug}`;
             
             const imgUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(chosenImageQuery)}&w=800&h=450&c=7&rs=1&p=0&dpr=1.5&pid=1.7`;
             
@@ -172,7 +248,7 @@ function generateAndDownload() {
     
     const metaDesc = remainingParagraphs[0] ? remainingParagraphs[0].substring(0, 150) + '...' : h1Title;
     
-    // 3. Satukan HTML Output + Script AGC Yang Diperbaiki
+    // 3. Satukan HTML Output + Script AGC
     const finalHtmlOutput = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -291,7 +367,9 @@ function generateAndDownload() {
                     count++;
                     
                     const slug = relatedTerm.replace(/\\s+/g, '-').toLowerCase();
-                    const linkUrl = 'https://dreamroomdecor.github.io/trends/detail.html?q=' + encodeURIComponent(slug);
+                    
+                    // FORMAT LINK AGC TERBARU MENGGUNAKAN BASE DOMAIN
+                    const linkUrl = '${baseDomain}' + slug;
                     
                     const queryImg = relatedTerm + " home decor";
                     const imgUrl = 'https://tse1.mm.bing.net/th?q=' + encodeURIComponent(queryImg) + '&w=400&h=400&c=7&rs=1&p=0&dpr=1.5&pid=1.7';
