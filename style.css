@@ -16,9 +16,7 @@ header {
     background-color: #fff;
     border-bottom: 1px solid #e6e6e6;
     padding: 1rem 0;   
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    /* position: sticky, top: 0, dan z-index: 100 dihapus agar tidak menempel */
 }
 header .container {
     display: flex;
