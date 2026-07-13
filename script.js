@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Hook Title dan Suffix diubah ke Home Decor
     function generateSeoTitle(baseKeyword) {
         const hookWords = ['Beautiful', 'Aesthetic', 'Modern', 'Minimalist', 'Cozy', 'Elegant', 'Luxury', 'Creative', 'Stunning', 'Inspiring'];
         const suffixWords = ['Home Decor', 'Design Ideas', 'Interior Inspo', 'Room Decor', 'Decorating Tips'];
@@ -55,17 +54,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const keywordForUrl = keyword.replace(/\s/g, '-').toLowerCase();
             const linkUrl = `detail.html?q=${encodeURIComponent(keywordForUrl)}`;
             
-            // Query gambar diubah mencari interior decor, rasio gambar square 400x400
+            // Rasio gambar diubah mencari rasio 2:3 -> 400x600
             const queryImage = keyword + " home decor interior";
-            const imageUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(queryImage)}&w=400&h=400&c=7&rs=1&p=0&dpr=1.5&pid=1.7`;
+            const imageUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(queryImage)}&w=400&h=600&c=7&rs=1&p=0&dpr=1.5&pid=1.7`;
 
             const article = document.createElement('article');
             article.className = 'content-card';
+            // Menyesuaikan judul untuk memakai div text normal
             article.innerHTML = `
                 <a href="${linkUrl}">
                     <img src="${imageUrl}" alt="${title}" loading="lazy">
                     <div class="content-card-body">
-                        <h2>${title}</h2>
+                        <div class="normal-title">${title}</div>
                     </div>
                 </a>
             `;
