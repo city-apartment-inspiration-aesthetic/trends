@@ -4,7 +4,7 @@
 
 body {
     font-family: 'Open Sans', sans-serif;
-    font-size: 16px; /* Ukuran dasar yang nyaman dibaca */
+    font-size: 16px; 
     line-height: 1.6;
     background-color: #f9f9f9; 
     color: #333333;
@@ -16,7 +16,7 @@ body {
 header {
     background-color: #fff;
     border-bottom: 1px solid #e6e6e6;
-    padding: 0.8rem 0; /* Diperkecil agar lebih efisien */
+    padding: 0.8rem 0; 
 }
 header .container {
     display: flex;
@@ -25,7 +25,7 @@ header .container {
 }
 .logo-link { text-decoration: none; }
 .logo {
-    font-size: 1.6rem; /* Diperkecil sedikit agar lebih elegan */
+    font-size: 1.6rem; 
     font-weight: 700;
     color: #4a8a4f;
     letter-spacing: -0.5px;
@@ -33,7 +33,7 @@ header .container {
 nav ul {
     list-style: none;
     display: flex;
-    gap: 1.2rem; /* Dirapatkan sedikit */
+    gap: 1.2rem; 
 }
 nav a {
     text-decoration: none;
@@ -47,12 +47,12 @@ nav a:hover { color: #4a8a4f; }
 /* HERO SECTION */
 .hero {
     background-color: #eef2ef;
-    padding: 2rem 0; /* Mengurangi ruang kosong berlebih di atas dan bawah */
+    padding: 2rem 0; 
     text-align: center;
     margin-bottom: 1.5rem;
 }
 .hero h1 {
-    font-size: 2.2rem; /* Ukuran lebih proporsional untuk laptop */
+    font-size: 1.6rem; /* Diperkecil */
     margin-bottom: 0.6rem;
     color: #222;
     line-height: 1.2;
@@ -67,13 +67,12 @@ nav a:hover { color: #4a8a4f; }
 /* GRID CONTENT (WIDGET/KARTU) */
 .content-grid {
     display: grid;
-    /* Lebar minimum kartu disesuaikan agar grid lebih padat */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px; /* Jarak antar kartu dirapatkan */
+    gap: 16px; 
 }
 .content-card {
     background-color: #fff;
-    border-radius: 6px; /* Sudut lebih tajam/profesional */
+    border-radius: 6px; 
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -89,55 +88,51 @@ nav a:hover { color: #4a8a4f; }
 }
 .content-card img {
     width: 100%;
-    height: 200px; /* Gambar dibuat lebih pendek agar isi teks lebih terlihat */
+    height: auto; /* Disesuaikan untuk ratio baru */
+    aspect-ratio: 2 / 3; /* Rasio gambar 2:3 */
     object-fit: cover;
     display: block;
 }
 .content-card-body {
-    padding: 12px 14px; /* Padding dirapatkan */
+    padding: 12px 14px; 
 }
-.content-card-body h2, .content-card-body h3 {
-    font-size: 1.05rem; /* Ukuran pas, tidak terlalu besar */
+/* Teks normal, tidak h3 lagi */
+.content-card-body .normal-title {
+    font-size: 1rem; 
     margin-bottom: 0;
     color: #333;
     line-height: 1.4;
-    font-weight: 600;
+    font-weight: 400; /* Font weight normal */
 }
 
 /* DETAIL ARTICLE */
 .main-article {
     background: #fff;
-    padding: 25px; /* Mengurangi ruang kosong berlebih */
+    padding: 25px; 
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     margin: 20px 0;
+}
+#detail-title {
+    font-size: 1.5rem; /* Ukuran h1 diperkecil */
+    margin-bottom: 15px;
+    line-height: 1.3;
+    color: #222;
 }
 .detail-image img {
     width: 100%;
     border-radius: 6px;
     margin-bottom: 15px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
 }
 .article-content {
-    font-size: 1.05rem; /* Ukuran baca standar modern (sekitar 17px) */
+    font-size: 1.05rem; 
     line-height: 1.7;
     color: #333;
 }
-.article-content h1 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    line-height: 1.3;
-}
 .article-content p {
     margin-bottom: 1.2rem;
-}
-.related-posts-section {
-    margin: 30px 0;
-}
-.related-posts-section h3 {
-    margin-bottom: 1.2rem;
-    text-align: center;
-    font-size: 1.5rem; /* Lebih proporsional dari 1.8rem */
-    color: #222;
 }
 
 /* LOADER */
@@ -170,21 +165,17 @@ footer {
         gap: 8px;
         padding: 10px 0;
     }
-    nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 12px;
-        padding: 0;
+    
+    nav { 
+        display: none; /* Sembunyikan navigasi di HP sesuai permintaan */ 
     }
-    nav a {
-        font-size: 0.9rem;
-    }
+    
     .hero {
-        padding: 1.5rem 0; /* Lebih efisien di layar kecil */
+        padding: 1.5rem 0; 
         margin-bottom: 1rem;
     }
     .hero h1 {
-        font-size: 1.6rem; /* Disesuaikan untuk HP agar tidak makan tempat */
+        font-size: 1.4rem; 
     }
     .hero p {
         font-size: 0.95rem;
@@ -192,29 +183,23 @@ footer {
     }
     .content-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 12px; /* Jarak antar artikel di HP dirapatkan */
-    }
-    .content-card img {
-        height: 160px; /* Gambar lebih efisien di layar kecil */
+        gap: 12px; 
     }
     .content-card-body {
         padding: 10px;
     }
-    .content-card-body h2, .content-card-body h3 {
+    .content-card-body .normal-title {
         font-size: 0.95rem;
     }
     .main-article {
         padding: 15px;
         margin: 15px 0;
     }
+    #detail-title {
+        font-size: 1.3rem; /* Lebih kecil lagi di mobile */
+    }
     .article-content {
-        font-size: 1rem; /* Ukuran baca optimal untuk ponsel */
+        font-size: 1rem; 
         line-height: 1.6;
-    }
-    .article-content h1 {
-        font-size: 1.6rem;
-    }
-    .related-posts-section h3 {
-        font-size: 1.3rem;
     }
 }
