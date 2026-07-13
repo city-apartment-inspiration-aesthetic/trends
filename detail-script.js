@@ -149,20 +149,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         .map(k => k.trim())
                         .filter(k => k.length > 0 && !displayedKeywords.has(k.toLowerCase()));
                     
-                    // Acak urutan kata kunci dari keyword.txt
+                    // Acak file keyword.txt
                     for (let i = keywords.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [keywords[i], keywords[j]] = [keywords[j], keywords[i]];
                     }
                     
-                    // Mengubah alokasi menjadi 6 teratas (sebelum ad3) dan 6 terbawah (setelah ad3)
-                    let topItems = suggestionsList.slice(0, 6);
-                    let neededForTop = 6 - topItems.length;
+                    // Ambil 4 untuk atas dan sisa suggest untuk bawah
+                    let topItems = suggestionsList.slice(0, 4);
+                    let neededForTop = 4 - topItems.length;
                     
-                    let bottomItems = [];
+                    let bottomItems = suggestionsList.slice(4, 12);
+                    let neededForBottom = 8 - bottomItems.length;
+
                     let keywordIndex = 0;
 
-                    // Penuhi sisa slot 6 teratas jika suggest dari Google tidak mencapai 6 item
+                    // Penuhi kekurangan 4 item atas dari keyword.txt
                     while(neededForTop > 0 && keywordIndex < keywords.length) {
                         topItems.push(keywords[keywordIndex]);
                         displayedKeywords.add(keywords[keywordIndex].toLowerCase());
@@ -170,11 +172,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         neededForTop--;
                     }
 
-                    // Ambil 6 item berikutnya untuk bagian bawah iklan
-                    while(bottomItems.length < 6 && keywordIndex < keywords.length) {
+                    // Penuhi sisa slot 8 item bawah dari keyword.txt
+                    while(neededForBottom > 0 && keywordIndex < keywords.length) {
                         bottomItems.push(keywords[keywordIndex]);
                         displayedKeywords.add(keywords[keywordIndex].toLowerCase());
                         keywordIndex++;
+                        neededForBottom--;
                     }
                     
                     renderCards(topItems, 'related-posts-top');
@@ -193,10 +196,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const keywordForUrl = term.replace(/\s/g, '-').toLowerCase();
                 const linkUrl = `detail.html?q=${encodeURIComponent(keywordForUrl)}`;
                 
+                // Gambar Related dengan rasio 2:3
                 const queryImage = term + " home decor";
                 const imageUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(queryImage)}&w=400&h=600&c=7&rs=1&p=0&dpr=1.5&pid=1.7`;
                 
                 const newRelatedTitle = generateSeoTitle(term);
+                // Menggunakan div.normal-title
                 const card = `<article class="content-card"><a href="${linkUrl}"><img src="${imageUrl}" alt="${newRelatedTitle}" loading="lazy"><div class="content-card-body"><div class="normal-title">${newRelatedTitle}</div></div></a></article>`;
                 container.innerHTML += card;
             });
