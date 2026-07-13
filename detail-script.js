@@ -100,11 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.title = `${newTitle} | Home Decor Ideas`;
             if(detailTitle) detailTitle.textContent = newTitle;
 
-            // Rasio gambar utama menjadi 2:3 (width 600, height 900)
             const queryImage = term + " home decor interior";
             const mainImageUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(queryImage)}&w=600&h=900&c=7&rs=1&p=0&dpr=1.5&pid=1.7`;
             
-            // Membungkus gambar dengan link yang mengarah ke detail.html?q=
             if(detailImageContainer) {
                 detailImageContainer.innerHTML = `<a href="detail.html?q="><img src="${mainImageUrl}" alt="${newTitle}" style="width:100%; border-radius:8px; object-fit:cover; aspect-ratio: 2/3;"></a>`;
             }
@@ -151,20 +149,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         .map(k => k.trim())
                         .filter(k => k.length > 0 && !displayedKeywords.has(k.toLowerCase()));
                     
-                    // Shuffle keyword.txt
+                    // Acak urutan kata kunci dari keyword.txt
                     for (let i = keywords.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [keywords[i], keywords[j]] = [keywords[j], keywords[i]];
                     }
                     
-                    // Siapkan array pembagian 4 teratas dan 6 bawah
-                    let topItems = suggestionsList.slice(0, 4);
-                    let neededForTop = 4 - topItems.length;
+                    // Mengubah alokasi menjadi 6 teratas (sebelum ad3) dan 6 terbawah (setelah ad3)
+                    let topItems = suggestionsList.slice(0, 6);
+                    let neededForTop = 6 - topItems.length;
                     
                     let bottomItems = [];
                     let keywordIndex = 0;
 
-                    // Penuhi kekurangan 4 pertama bila suggest tidak sampai 4
+                    // Penuhi sisa slot 6 teratas jika suggest dari Google tidak mencapai 6 item
                     while(neededForTop > 0 && keywordIndex < keywords.length) {
                         topItems.push(keywords[keywordIndex]);
                         displayedKeywords.add(keywords[keywordIndex].toLowerCase());
@@ -172,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         neededForTop--;
                     }
 
-                    // Ambil 6 sisanya untuk bagian bawah
+                    // Ambil 6 item berikutnya untuk bagian bawah iklan
                     while(bottomItems.length < 6 && keywordIndex < keywords.length) {
                         bottomItems.push(keywords[keywordIndex]);
                         displayedKeywords.add(keywords[keywordIndex].toLowerCase());
@@ -195,12 +193,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const keywordForUrl = term.replace(/\s/g, '-').toLowerCase();
                 const linkUrl = `detail.html?q=${encodeURIComponent(keywordForUrl)}`;
                 
-                // Rasio gambar 2:3 untuk thumbnail (400x600)
                 const queryImage = term + " home decor";
                 const imageUrl = `https://tse1.mm.bing.net/th?q=${encodeURIComponent(queryImage)}&w=400&h=600&c=7&rs=1&p=0&dpr=1.5&pid=1.7`;
                 
                 const newRelatedTitle = generateSeoTitle(term);
-                // Menggunakan div.normal-title, bukan h3
                 const card = `<article class="content-card"><a href="${linkUrl}"><img src="${imageUrl}" alt="${newRelatedTitle}" loading="lazy"><div class="content-card-body"><div class="normal-title">${newRelatedTitle}</div></div></a></article>`;
                 container.innerHTML += card;
             });
